@@ -32,7 +32,7 @@ def make_new_dict(filename):  # Делает словарь из файла csv
     return new_dict
 
 
-def generate_new_dict(args, new_dict):
+def generate_new_dict(args, new_dict):  # Даже не спрашивайте как, работает и работает
     arg = args[0]
     if type(arg) is dict:
         return dict(arg)
