@@ -2,10 +2,8 @@ from functions_for_dict import beautiful_print, make_new_dict, generate_new_dict
 
 dict_for_analysis = make_new_dict("titanic.csv")
 statistics = generate_new_dict([["people", "adult", "child"], ["sex", "male", "female"], ["class", "First", "Second", "Third"], ["company", "alone", "with_pair"], {"average_fare": 0, "count_known_fares": 0, "survived": 0, "died": 0, "average_age": 0, "count_known_ages": 0, "survival_rate": 0, "count": 0}], {})
-statistics["general"] = {"count_people": 0}
+statistics["general"] = {"count_people": 0, "male": 0, "female": 0, "percent_adult_men": 0, "people_in_ranks": {"First": 0, "Second": 0, "Third": 0}}
 for people in dict_for_analysis.keys():
-
-    statistics["general"]["count_people"] += 1
 
     age_key = "child" if dict_for_analysis[people]["who"] == "child" else "adult"
     sex = dict_for_analysis[people]["sex"]
@@ -15,6 +13,12 @@ for people in dict_for_analysis.keys():
     company = "alone" if dict_for_analysis[people]["alone"] == "True" else "with_pair"
     age = float(dict_for_analysis[people]["age"]) if dict_for_analysis[people]["age"] != "" else None
 
+    statistics["general"]["count_people"] += 1
+    statistics["general"]["people_in_ranks"][rank] += 1
+    statistics["general"][sex] += 1
+    if sex == "male" and age_key == "adult":
+        statistics["general"]["percent_adult_men"] += 1
+
     statistics["people"][age_key]["sex"][sex]["class"][rank]["company"][company]["average_fare"] += fare
     statistics["people"][age_key]["sex"][sex]["class"][rank]["company"][company]["count_known_fares"] += 1
     statistics["people"][age_key]["sex"][sex]["class"][rank]["company"][company]["survived"] += int(survived)
@@ -22,6 +26,8 @@ for people in dict_for_analysis.keys():
     statistics["people"][age_key]["sex"][sex]["class"][rank]["company"][company]["average_age"] += age if age else 0
     statistics["people"][age_key]["sex"][sex]["class"][rank]["company"][company]["count_known_ages"] += 1 if age else 0
     statistics["people"][age_key]["sex"][sex]["class"][rank]["company"][company]["count"] += 1
+
+statistics["general"]["percent_adult_men"] /= statistics["general"]["count_people"]
 
 for age_key in ["child", "adult"]:
     for sex_key in ["male", "female"]:
