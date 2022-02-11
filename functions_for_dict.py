@@ -1,5 +1,5 @@
 from copy import copy
-
+from copy import deepcopy
 
 def beautiful_print(data, add_nesting=0, lines_nesting=[], recr=0, last=False):  # Делает красивый вывод словарика, очень красивый вывод
     first = recr == 0
@@ -35,12 +35,12 @@ def make_new_dict(filename):  # Делает словарь из файла csv
 def generate_new_dict(args, new_dict):  # Даже не спрашивайте как, работает и работает
     arg = args[0]
     if type(arg) is dict:
-        return dict(arg)
+        return deepcopy(arg)
     else:
         new_dict[arg[0]] = {}
         for elem in arg[1:]:
             new_dict[arg[0]][elem] = generate_new_dict((args[1:] if 1 < len(args) else [{}]), {})
-    return dict(new_dict)
+    return deepcopy(new_dict)
 
 
 # beautiful_print(new_generate_new_dict([["a", "b", "c"], ["d", "e", "f"], {1: 0, 2: 0}], {}))
